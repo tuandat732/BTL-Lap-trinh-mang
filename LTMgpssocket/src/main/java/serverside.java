@@ -20,6 +20,7 @@ public class serverside {
 // Create Server side socket
         try {
             server = new ServerSocket(portnumber);
+            server.setReuseAddress(true);
         } catch (IOException ie) {
             System.out.println("Cannot open socket." + ie);
             System.exit(1);
@@ -38,31 +39,8 @@ public class serverside {
                 int clientPort = client.getPort();
                 System.out.println("Client host = " + clientHost + " Client port = " + clientPort);
 // Read data from the client
-                InputStream clientIn = client.getInputStream();
-                BufferedReader br = new BufferedReader(new
-                        InputStreamReader(clientIn));
-                String msgFromClient = br.readLine();
-                TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {};
-                Map<String, Object> mapping = new ObjectMapper().readValue(msgFromClient, typeRef);
-                Boolean closesocket= false;
-                if (mapping.containsKey("endProcess")) closesocket= Boolean.getBoolean(mapping.get("endProcess").toString());
-                System.out.println(msgFromClient);
-               if(!closesocket) {database db= new database();
-                                db.savelog(mapping);}
-
-
-// Send response to the client
-//                if (msgFromClient != null && !jsonobject.getBoolean("endProcess") {
-//                    OutputStream clientOut = client.getOutputStream();PrintWriter pw = new PrintWriter(clientOut, true);
-//                    String ansMsg = "Hello, " + msgFromClient;
-//                    pw.println(ansMsg);
-//                }
-// Close sockets
-                if ( closesocket) {
-                    server.close();
-                    client.close();
-                    break;
-                }
+                clienthandle clientsock= new clienthandle(client);
+                new Thread(clientsock).start();
             } catch (IOException ie) {
             }
         }

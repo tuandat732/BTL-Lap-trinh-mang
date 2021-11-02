@@ -3,26 +3,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class clientside {
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         Socket client = null;
 // Default port number we are going to use
         int portnumber = 1234;
-        if (args.length >= 1){
-            portnumber = Integer.parseInt(args[0]);
-        }
+        client = new Socket(InetAddress.getLocalHost(), portnumber);
+        OutputStream clientOut = client.getOutputStream();
+        PrintWriter pw = new PrintWriter(clientOut, true);
         for(int i=0;i<10;i++) {
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             try {
                 String msg = "";
 // Create a client socket
-                client = new Socket(InetAddress.getLocalHost(), portnumber);
-                System.out.println("Client socket is created " + client);
+
+
 // Create an output stream of the client socket
-                OutputStream clientOut = client.getOutputStream();
-                PrintWriter pw = new PrintWriter(clientOut, true);
+
 // Create an input stream of the client socket
 //                InputStream clientIn = client.getInputStream();
 //                BufferedReader br = new BufferedReader(new
@@ -40,19 +45,22 @@ public class clientside {
                 location.put("y",y);
                 mapmsg.put("location", location);
                 msg=  new ObjectMapper().writeValueAsString(mapmsg);
-                System.out.println(msg);
+                System.out.println(msg+"\n");
                 pw.println(msg);
 // Read data from the input stream of the client socket.
                // System.out.println("Message returned from the server = " + br.readLine());
-                pw.close();
+
+                pw.flush();
                 //br.close();
-                client.close();
+                //client.close();
 // Stop the operation
                 if (msg.equalsIgnoreCase("Bye")) {break;
                 }
             } catch (IOException ie) {
                 System.out.println("I/O error " + ie);
             }
+
         }
+        pw.close();
     }
 }
