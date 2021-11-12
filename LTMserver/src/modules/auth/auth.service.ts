@@ -122,4 +122,22 @@ export class AuthService {
     await this.userModel.updateOne({ _id: user._id }, { lastToken: accessToken });
     return new ApiOK({ lastToken: accessToken });
   }
+  async getme(request) {
+    const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
+    let email = user['email']
+    let searchres = await this.userModel.findOne({ email: email })
+
+    if (searchres) {
+      let userres = {
+        email: searchres.email,
+        phoneNumber: searchres.phoneNumber,
+        firstName: searchres.firstName,
+        lastName: searchres.lastName,
+        address: searchres.address,
+      }
+      return new ApiOK({
+        result: userres
+      })
+    }
+  }
 }

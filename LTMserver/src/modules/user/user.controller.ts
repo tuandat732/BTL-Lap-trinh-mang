@@ -18,7 +18,7 @@ import { Auth } from "../../common/decorator/auth.decorator";
 import { AppConfig } from "../../common/contants/app-config";
 import { ApiError } from "../../common/responses/api-error";
 import { isEmpty } from 'class-validator';
-import { getlistuser } from './user.dto';
+import { getdetailuser, getlistuser } from './user.dto';
 import { userService } from './user.service';
 @Controller('user')
 @ApiTags('user')
@@ -28,16 +28,17 @@ export class userController {
     @Auth()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: "Get location " })
-    async getListuser(@Query() data: getlistuser, @Request() request) {
+    async getListuser(@Param() data: getlistuser, @Request() request) {
         return await this.userService.getlistuser(data, request);
 
     }
-    @Get('/getMe')
+
+    @Get('/getDetailUser')
     @Auth()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: "Get location " })
-    async getMe(@Request() request) {
-        return await this.userService.getme(request);
+    async searchCatalog(@Query() data: getdetailuser, @Request() request) {
+        return await this.userService.getdetailuser(data, request);
 
     }
 }

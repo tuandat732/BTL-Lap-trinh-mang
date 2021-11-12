@@ -31,3 +31,18 @@ export class getlistuser {
     @IsOptional()
     id: string;
 }
+export class getdetailuser {
+    @ApiProperty({ required: false })
+    @Type(() => Number)
+    @IsNumber()
+    limit: number;
+
+    @ApiProperty({ required: false })
+    @Type(() => Number)
+    @IsNumber()
+    offset: number;
+
+    @ApiProperty({ required: true })
+    @IsOptional()
+    userId: string;
+}
