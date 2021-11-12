@@ -140,4 +140,22 @@ export class AuthService {
       })
     }
   }
+  async getmeadmin(request) {
+    const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
+    let email = user['email']
+    let searchres = await this.adminModel.findOne({ email: email })
+
+    if (searchres) {
+      let userres = {
+        email: searchres.email,
+        phoneNumber: searchres.phoneNumber,
+        firstName: searchres.firstName,
+        lastName: searchres.lastName,
+        address: searchres.address,
+      }
+      return new ApiOK({
+        result: userres
+      })
+    }
+  }
 }

@@ -73,5 +73,14 @@ export class AuthController {
     return await this.authService.getme(request);
 
   }
+  @Get('/getMeAdmin')
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Get location " })
+  async getmeadmin(@Request() request) {
+    return await this.authService.getmeadmin(request);
+
+  }
+
 
 }

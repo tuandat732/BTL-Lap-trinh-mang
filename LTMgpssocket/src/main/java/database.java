@@ -18,7 +18,7 @@ public class database {
     public void savelog(Map<String, Object> json){
         MongoClient mongoClient= new MongoClient(new MongoClientURI("mongodb+srv://hieunm18:!23456@cluster0.kex4v.mongodb.net/admin"));
         MongoDatabase db= mongoClient.getDatabase("LTM");
-        MongoCollection coll= db.getCollection("gpslog");
+        MongoCollection coll= db.getCollection("gpslogs");
 
 
         Document filter= new Document("userId", json.get("userId"));
