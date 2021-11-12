@@ -24,7 +24,7 @@ import { gpsService } from './gps.service';
 @ApiTags('gps')
 export class gpsController {
     constructor(private readonly gpsService: gpsService) { }
-    @Get('/getLocation')
+    @Get('/getDetailUser')
     @Auth()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: "Get location " })

@@ -6,10 +6,12 @@ import { ConfigService } from "../../config/config.service";
 import { JwtModule } from "@nestjs/jwt";
 import { gpsController } from "./gps.controller";
 import { gpsService } from "./gps.service";
+import { UserSchema } from "src/database/models/user.model";
 
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: "gpslog", schema: gpslogSchema }]),
+        MongooseModule.forFeature([{ name: "user", schema: UserSchema }]),
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
