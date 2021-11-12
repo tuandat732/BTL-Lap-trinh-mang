@@ -19,7 +19,7 @@ import { userModule } from './modules/user/user.module';
   imports: [
     DatabaseModule,
     AuthModule,
-    gpsModule,
+   // gpsModule,
     userModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', AppConfig.STATIC_DIR),

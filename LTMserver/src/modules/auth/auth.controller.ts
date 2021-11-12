@@ -18,7 +18,7 @@ import { ForgotPasswordDto } from "./dto/forgot-password.dto";
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post()
   @HttpCode(HttpStatus.OK)
@@ -37,7 +37,7 @@ export class AuthController {
   @Post('logout-user')
   @Auth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation( { summary: 'logout' } )
+  @ApiOperation({ summary: 'logout' })
   async logout(@Request() request) {
     return await this.authService.logout(request);
   }
@@ -45,26 +45,42 @@ export class AuthController {
   @Post('logout-admin')
   @Auth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation( { summary: 'logout admin' } )
+  @ApiOperation({ summary: 'logout admin' })
   async logoutAdmin(@Request() request) {
     return await this.authService.logoutAdmin(request);
   }
 
   @Post('login-admin')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'login with admin' } )
+  @ApiOperation({ summary: 'login with admin' })
   async loginAdmin(@Body() data: LoginDto) {
     return await this.authService.loginAdmin(data);
   }
 
- 
+
 
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({summary: 'verify otp code to reset password'})
+  @ApiOperation({ summary: 'verify otp code to reset password' })
   async resetPassword(@Body() data: LoginDto) {
     return await this.authService.resetPassword(data);
   }
+  @Get('/getMe')
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Get location " })
+  async getMe(@Request() request) {
+    return await this.authService.getme(request);
 
-   
+  }
+  @Get('/getMeAdmin')
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Get location " })
+  async getmeadmin(@Request() request) {
+    return await this.authService.getmeadmin(request);
+
+  }
+
+
 }
