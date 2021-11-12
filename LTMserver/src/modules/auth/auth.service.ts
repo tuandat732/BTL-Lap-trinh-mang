@@ -20,10 +20,10 @@ export class AuthService {
     @InjectModel('User') private readonly userModel: Model<User>,
     @InjectModel('Admin') private readonly adminModel: Model<Admin>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async register(data: RegisterDto) {
-      const userByEmail = await this.userModel.findOne({ email: {'$regex': Utils.escapeRegex(data.email), '$options': 'i'} });
+    const userByEmail = await this.userModel.findOne({ email: { '$regex': Utils.escapeRegex(data.email), '$options': 'i' } });
     if (userByEmail) throw new ApiError('Email đã được đăng kí.Vui lòng sử dụng email khác', 'E2');
 
     data.email = data.email.toLowerCase();
@@ -44,24 +44,41 @@ export class AuthService {
     const accessToken = Utils.generateToken(user, this.jwtService);
     user.lastToken = accessToken;
     await user.save();
-    return new ApiOK({ lastToken: accessToken });
+    const jsonres = {
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      address: data.address,
+      lastToken: accessToken
+
+    }
+    return new ApiOK(jsonres);
   }
 
   async login(data: LoginDto) {
-    const user = await this.userModel.findOne({ email: {'$regex': Utils.escapeRegex(data.email), '$options': 'i'} });
+    const user = await this.userModel.findOne({ email: { '$regex': Utils.escapeRegex(data.email), '$options': 'i' } });
     if (!user || !await bcrypt.compare(data.password, user.password)) {
       throw new ApiError('Email hoặc mật khẩu không hợp lệ', 'E15', {});
     }
 
     const accessToken = Utils.generateToken(user, this.jwtService);
     await this.userModel.updateOne({ _id: user._id }, { lastToken: accessToken });
-    return new ApiOK({ lastToken: user.lastToken });
+    const jsonres = {
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      address: user.address,
+      lastToken: accessToken
+    }
+    return new ApiOK(jsonres);
   }
 
- 
+
 
   async logout(request: any) {
-    const user = Utils.decodeJwtService(request.headers['authorization'],this.jwtService) ;
+    const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
     try {
       await this.userModel.updateOne({ _id: user['_id'] }, { lastToken: null });
       return new ApiOK({ result: true });
@@ -72,7 +89,7 @@ export class AuthService {
   }
 
   async logoutAdmin(request: any) {
-    const user = Utils.decodeJwtService(request.headers['authorization'],this.jwtService) ;
+    const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
     try {
       await this.adminModel.updateOne({ _id: user['_id'] }, { lastToken: null });
       return new ApiOK({ result: true });
@@ -83,7 +100,7 @@ export class AuthService {
   }
 
   async loginAdmin(data: LoginDto) {
-    const admin = await this.adminModel.findOne( { email: data.email });
+    const admin = await this.adminModel.findOne({ email: data.email });
     if (!admin || !await bcrypt.compare(data.password, admin.password)) {
       throw new ApiError('Email hoặc mật khẩu không hợp lệ .', 'E15', {});
     }
@@ -93,10 +110,10 @@ export class AuthService {
     return new ApiOK({ lastToken: accessToken });
   }
 
-  
+
 
   async resetPassword(data: LoginDto) {
-    const user = await this.userModel.findOne({ email: { '$regex': Utils.escapeRegex(data.email),'$options': 'i'} });
+    const user = await this.userModel.findOne({ email: { '$regex': Utils.escapeRegex(data.email), '$options': 'i' } });
     if (!user) throw new ApiError("User không tồn tại", "E1");
     const password = await Utils.hashPassword(data.password);
     user['password'] = password;
