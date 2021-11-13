@@ -9,18 +9,20 @@ import com.mongodb.client.model.FindOneAndUpdateOptions;
 import org.bson.Document;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
 public class database {
-    public void savelog(Map<String, Object> json){
+    public void savelog(Map<String, Object> json) throws IOException {
         MongoClient mongoClient= new MongoClient(new MongoClientURI("mongodb+srv://hieunm18:!23456@cluster0.kex4v.mongodb.net/admin"));
         MongoDatabase db= mongoClient.getDatabase("LTM");
         MongoCollection coll= db.getCollection("gpslogs");
 
-
+        savetofile file= new savetofile();
+        file.savefile(json);
         Document filter= new Document("userId", json.get("userId"));
         FindIterable<Document> check = coll.find(filter);
         MongoCursor<Document> iterator = check.iterator();
