@@ -21,9 +21,9 @@ import { userModule } from './modules/user/user.module';
     AuthModule,
    // gpsModule,
     userModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', AppConfig.STATIC_DIR),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', AppConfig.STATIC_DIR),
+    // }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

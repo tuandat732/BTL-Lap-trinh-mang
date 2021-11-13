@@ -7,13 +7,26 @@ import {ThemeContext} from './src/context/theme.context';
 import {MainNavigation} from './src/navigations/main.navigation';
 import {ThemeProvider} from './src/styles/styled-component';
 import {navigationService} from './src/services/navigation.service';
+import {authService} from './src/services/auth.service';
+import {User} from './src/models';
+import {AuthNavigation} from './src/navigations/auth.navigation';
 
 const App = () => {
   const [theme, setTheme] = useState(themes.white);
+  const [user, setUser] = useState<User>(null);
 
   useEffect(() => {
     getThemeInLocal();
+    const subcription = authService.currentUser.subscribe(user =>
+      setUser(user),
+    );
+    getMe();
+    return () => subcription.unsubscribe();
   }, []);
+
+  const getMe = async () => {
+    await authService.getMe();
+  };
 
   const getThemeInLocal = async () => {
     const themeLocal = await storageService.getTheme();
@@ -54,9 +67,13 @@ const App = () => {
           toggleTheme: toggleTheme,
         }}>
         <ThemeProvider theme={theme}>
-          <NetProvider>
-            <MainNavigation />
-          </NetProvider>
+          {user ? (
+            <NetProvider>
+              <MainNavigation />
+            </NetProvider>
+          ) : (
+            <AuthNavigation />
+          )}
         </ThemeProvider>
       </ThemeContext.Provider>
     </NavigationContainer>
