@@ -48,7 +48,7 @@ class AuthService {
   }
 
   postLogin(user: any): Observable<IResponse> {
-    return apiService.post('/auth/login', {body: user}).pipe(
+    return apiService.post('/auth/login-user', {body: user}).pipe(
       map(res => {
         console.log('ressposne nef', res);
         return res;
@@ -57,7 +57,7 @@ class AuthService {
   }
 
   postRegister(user: any): Observable<IResponse> {
-    return apiService.post('/register', {body: user});
+    return apiService.post('/auth', {body: user});
   }
 }
 

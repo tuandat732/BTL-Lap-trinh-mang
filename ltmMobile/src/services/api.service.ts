@@ -10,7 +10,7 @@ interface ConfigRequest {
 }
 
 class ApiService {
-  private url = 'http://localhost:9000/api';
+  private url = 'https://0479-171-255-247-210.ngrok.io/api';
   private defaultHeaders: any = {
     'Content-Type': 'application/json',
   };

@@ -23,6 +23,7 @@ public class clienthandle implements Runnable {
                     InputStreamReader(clientIn));
             String msgFromClient;
             while ((msgFromClient = br.readLine()) != null) {
+                System.out.println(msgFromClient);
                 TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {
                 };
                 Map<String, Object> mapping = new ObjectMapper().readValue(msgFromClient, typeRef);

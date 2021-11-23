@@ -1,9 +1,7 @@
 import React from 'react';
-import {useFormik} from 'formik';
-import {Button, ScrollView, Text, TextInput, View} from 'react-native';
-import styled from 'styled-components';
+import {Formik} from 'formik';
+import {Button, TextInput, View} from 'react-native';
 import {authService} from '../../services/auth.service';
-import {signInValidation} from './validation';
 import {User} from '../../models';
 import {navigationService} from '../../services/navigation.service';
 
@@ -14,62 +12,65 @@ function LoginScreen() {
   };
 
   const onSubmit = values => {
-    console.log('login submit');
+    console.log('login submit', values);
     authService.postLogin(values).subscribe(async res => {
       await authService.setAuth(new User(res.data));
       navigationService.navigate('Home');
     });
   };
 
-  const formik = useFormik({
-    initialValues: initialValues,
-    // validationSchema: signInValidation,
-    onSubmit: onSubmit,
-  });
-
   return (
-    <View>
-      {/* <ScrollView> */}
-      <View>
-        <TextInput
-          style={{
-            borderColor: 'gray',
-            borderWidth: 1,
-            marginTop: 30,
-            marginBottom: 10,
-            borderRadius: 10,
-          }}
-          value={formik.values.email}
-          onChange={formik.handleChange('email')}
-          onBlur={formik.handleBlur('email')}
-          placeholder="Email"
-        />
-        {/* {formik.touched.email && Boolean(formik.errors.email) && (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={values => {
+        console.log(values);
+        onSubmit(values);
+      }}>
+      {({handleChange, handleBlur, handleSubmit, values}) => (
+        <View style={{padding: 10}}>
+          {/* <ScrollView> */}
+          <View>
+            <TextInput
+              style={{
+                borderColor: 'gray',
+                borderWidth: 1,
+                marginTop: 30,
+                marginBottom: 10,
+                borderRadius: 10,
+              }}
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              placeholder="Email"
+            />
+            {/* {formik.touched.email && Boolean(formik.errors.email) && (
           <Text style={{color: 'red'}}>{formik.errors.email}</Text>
         )} */}
-      </View>
-      <View>
-        <TextInput
-          style={{
-            borderColor: 'gray',
-            borderWidth: 1,
-            marginTop: 30,
-            marginBottom: 10,
-            borderRadius: 10,
-          }}
-          value={formik.values.password}
-          onChange={formik.handleChange('password')}
-          onBlur={formik.handleBlur('password')}
-          placeholder="Password"
-        />
-        {/* {formik.touched.password && Boolean(formik.errors.password) && (
+          </View>
+          <View>
+            <TextInput
+              style={{
+                borderColor: 'gray',
+                borderWidth: 1,
+                marginTop: 30,
+                marginBottom: 10,
+                borderRadius: 10,
+              }}
+              value={values.password}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              placeholder="Password"
+            />
+            {/* {formik.touched.password && Boolean(formik.errors.password) && (
           <Text style={{color: 'red'}}>{formik.errors.password}</Text>
         )} */}
-      </View>
+          </View>
 
-      <Button onPress={formik.handleSubmit} title="Submit" />
-      {/* </ScrollView> */}
-    </View>
+          <Button onPress={handleSubmit} title="Submit" />
+          {/* </ScrollView> */}
+        </View>
+      )}
+    </Formik>
   );
 }
 

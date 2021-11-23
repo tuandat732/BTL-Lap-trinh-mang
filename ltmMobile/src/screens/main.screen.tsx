@@ -3,6 +3,7 @@ import {Button, Text, TextInput, View, TouchableOpacity} from 'react-native';
 import {NetContext} from '../context/net.context';
 import React from 'react';
 import GetLocation from 'react-native-get-location';
+import {authService} from '../services/auth.service';
 
 export const MainScreen = () => {
   const {client, isConnected} = useContext(NetContext);
@@ -42,11 +43,11 @@ export const MainScreen = () => {
       const sendLocaleInterver = setInterval(function () {
         GetLocation.getCurrentPosition({
           enableHighAccuracy: true,
-          timeout: 15000,
+          timeout: 5000,
         })
           .then(location => {
             const data = {
-              userId: 1,
+              userId: authService.getCurrentUser()._id,
               location: {
                 x: location.longitude,
                 y: location.latitude,
