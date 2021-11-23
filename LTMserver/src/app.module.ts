@@ -3,27 +3,25 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { JwtModule } from "@nestjs/jwt";
-import { ConfigModule } from "./config/config.module";
-import { ConfigService } from "./config/config.service";
-import { AppConfig } from "./common/contants/app-config";
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
+import { AppConfig } from './common/contants/app-config';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { gpsModule } from './modules/gps/gps.module';
 import { userModule } from './modules/user/user.module';
-
-
-
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
     DatabaseModule,
     AuthModule,
-   // gpsModule,
+    // gpsModule,
     userModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', AppConfig.STATIC_DIR),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', AppConfig.STATIC_DIR),
+    // }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -36,7 +34,6 @@ import { userModule } from './modules/user/user.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
-
+  providers: [AppService, AppGateway],
 })
-export class AppModule { }
+export class AppModule {}

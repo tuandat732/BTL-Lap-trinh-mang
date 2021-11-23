@@ -16,7 +16,7 @@ const NetProvider = ({...props}) => {
   const [client] = useState<TcpSocket.Socket>(() =>
     TcpSocket.createConnection(
       {
-        port: 5000,
+        port: 1234,
         host: '10.0.2.2',
         // localAddress: '127.0.0.1',
         reuseAddress: true,
