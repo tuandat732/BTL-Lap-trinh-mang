@@ -17,7 +17,7 @@ public class savetofile {
         myWriter.close();
     }
     public void savefile(Map<String, Object> json) throws IOException {
-        String root= "/home/hieu/Desktop/BTL-Lap-trinh-mang/LTMgpssocket/src/main/java/";
+        String root= "F:\\ptit\\nam4\\laptrinhmang\\btl\\BTL-Lap-trinh-mang\\LTMgpssocket\\";
         File parentdir= new File(root +"logfile");
         if (!parentdir.exists()){
             parentdir.mkdir();
@@ -26,7 +26,7 @@ public class savetofile {
         Boolean check= true;
         String filestr= json.get("userId").toString()+ ".txt";
         if (children== null){
-            File logfile= new File(root +"logfile"+ "/"+ filestr);
+            File logfile= new File(root +"logfile"+ "\\"+ filestr);
             save(logfile, json);
         }
         for(File file: children){
@@ -36,7 +36,7 @@ public class savetofile {
             }
         }
         if (check){
-            File logfile= new File(root +"logfile"+ "/"+ filestr);
+            File logfile= new File(root +"logfile"+ "\\"+ filestr);
             logfile.createNewFile();
             save(logfile, json);
         }
