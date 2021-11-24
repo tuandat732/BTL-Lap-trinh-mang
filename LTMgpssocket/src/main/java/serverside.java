@@ -1,12 +1,9 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
-import java.util.HashMap;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
+import classhandle.sharedataclass;
+import threadhandle.clienthandle;
 
 public class serverside {
     public static void main(String [] args) {
@@ -26,6 +23,7 @@ public class serverside {
             System.exit(1);
         }
         System.out.println("ServerSocket is created " + server);
+        sharedataclass sharedata= new sharedataclass();
 // Wait for the data from the client and reply
         while(true) {
             try {
