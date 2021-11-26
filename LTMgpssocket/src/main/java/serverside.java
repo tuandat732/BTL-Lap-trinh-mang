@@ -1,12 +1,15 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
+import classhandle.identify_socket;
+import classhandle.sharedataclass;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
+import threadhandle.adminhandle;
+import threadhandle.userhandle;
 
 public class serverside {
     public static void main(String [] args) {
@@ -26,6 +29,7 @@ public class serverside {
             System.exit(1);
         }
         System.out.println("ServerSocket is created " + server);
+       sharedataclass sharedata= new sharedataclass();
 // Wait for the data from the client and reply
         while(true) {
             try {
@@ -39,8 +43,31 @@ public class serverside {
                 int clientPort = client.getPort();
                 System.out.println("Client host = " + clientHost + " Client port = " + clientPort);
 // Read data from the client
-                clienthandle clientsock= new clienthandle(client);
-                new Thread(clientsock).start();
+                InputStream clientIn = client.getInputStream();
+                BufferedReader br = new BufferedReader(new
+                        InputStreamReader(clientIn));
+                String msgFromClient;
+                if((msgFromClient = br.readLine()) != null){
+                    System.out.println(msgFromClient);
+                    TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {
+                    };
+                    Map<String, Object> mapping = new ObjectMapper().readValue(msgFromClient, typeRef);
+                    String pattern= mapping.get("pattern").toString();
+                    if (pattern.equals("identify_socket")){
+                        identify_socket idsocket= new identify_socket((Map<String, Object>) mapping.get("payload"));
+                        if (idsocket.role.equals( "user")){
+                            userhandle usersock= new userhandle(client);
+                            new Thread(usersock).start();
+                        }
+                        if (idsocket.role.equals("admin")){
+                           sharedata.addSocketAdmin(client);
+
+                        }
+
+                    }
+                }
+//                clienthandle clientsock= new clienthandle(client);
+//                new Thread(clientsock).start();
             } catch (IOException ie) {
             }
         }
