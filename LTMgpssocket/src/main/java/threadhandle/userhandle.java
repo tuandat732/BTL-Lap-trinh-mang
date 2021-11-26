@@ -9,14 +9,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import classhandle.sharedataclass;
 
 import common.database;
+import common.savetofile;
 
-public class clienthandle implements Runnable {
+public class userhandle implements Runnable {
     private Socket clientSocket;
 
-    public clienthandle(Socket socket) {
+    public userhandle(Socket socket) {
         this.clientSocket = socket;
     }
 
@@ -26,6 +29,7 @@ public class clienthandle implements Runnable {
             BufferedReader br = new BufferedReader(new
                     InputStreamReader(clientIn));
             String msgFromClient;
+            sharedataclass sharedata= new sharedataclass();
             while ((msgFromClient = br.readLine()) != null) {
                 System.out.println(msgFromClient);
                 TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {
@@ -36,11 +40,24 @@ public class clienthandle implements Runnable {
                     closesocket = Boolean.getBoolean(mapping.get("endProcess").toString());
                 System.out.println(msgFromClient);
                 if (!closesocket) {
-                    database db = new database();
-                    db.savelog(mapping);
+                    //database db = new database();
+                   // db.savelog(mapping);
+//                    savetofile file= new savetofile();
+//                    file.savefile(mapping);
+                    List<Socket> listadmin= sharedataclass.getListadmin();
+                    for(Socket socket: listadmin) {
+                        if (socket.isConnected()) {
+                            adminhandle adminsock = new adminhandle(socket, msgFromClient);
+                            new Thread(adminsock).start();
+                        } else{
+                            sharedata.deleteSocketAdmin(socket);
+                        }
+                    }
+
                 }
                 if ( closesocket) {
                     clientSocket.close();
+
                     break;
                 }
             }

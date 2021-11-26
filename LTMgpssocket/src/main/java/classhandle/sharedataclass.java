@@ -1,14 +1,20 @@
 package classhandle;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class sharedataclass {
-    private static List<Socket> listadmin;
-    public void addSocketAdmin(Socket socket){
-        this.listadmin.add(socket);
+    private static List<Socket> listadmin= new ArrayList<>();
+
+    public static List<Socket> getListadmin() {
+        return listadmin;
+    }
+
+    public  void addSocketAdmin(Socket socket){
+        listadmin.add(socket);
     }
     public void deleteSocketAdmin(Socket socket){
-        this.listadmin.remove(socket);
+        listadmin.remove(socket);
     }
 }

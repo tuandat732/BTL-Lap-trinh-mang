@@ -18,8 +18,7 @@ import * as net from 'net';
   },
 })
 export class AppGateway
-  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
-{
+  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
   @WebSocketServer()
   server: Server;
 
@@ -36,7 +35,15 @@ export class AppGateway
     clientTcp.setEncoding('utf8');
 
     clientTcp.on('connect', () => {
+      let json = {
+        pattern: "identify_socket",
+        payload: {
+          role: "admin"
+        }
+      }
+      clientTcp.write(JSON.stringify(json) + "\n");
       console.log('connection client ok');
+      console.log(JSON.stringify(json))
     });
 
     clientTcp.on('error', function (error) {

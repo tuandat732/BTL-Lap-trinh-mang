@@ -18,6 +18,7 @@ public class clientside1 {
         client = new Socket(InetAddress.getLocalHost(), portnumber);
         OutputStream clientOut = client.getOutputStream();
         PrintWriter pw = new PrintWriter(clientOut, true);
+        pw.println("{\"pattern\":\"identify_socket\",\"payload\":{\"role\":\"user\"}}");
         for(int i=0;i<10;i++) {
             try {
                 Thread.sleep(5000L);
@@ -44,10 +45,14 @@ public class clientside1 {
                 Integer y= (int) Math.floor(Math.random()*(100-1+1)+1);
                 mapmsg.put("idUser", "user1");
                 Map<String, Object> location= new HashMap<>();
-                location.put("x",x);
-                location.put("y",y);
+                location.put("lat",x);
+                location.put("lng",y);
                 mapmsg.put("location", location);
-                msg=  new ObjectMapper().writeValueAsString(mapmsg);
+                Map<String, Object> msgpattern= new HashMap<>();
+                msgpattern.put("pattern", "send-location");
+                msgpattern.put("payload", mapmsg);
+
+                msg=  new ObjectMapper().writeValueAsString(msgpattern);
                 System.out.println(msg+"\n");
                 pw.println(msg);
 // Read data from the input stream of the client socket.
