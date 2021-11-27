@@ -35,14 +35,14 @@ public class adminhandle implements Runnable {
             //String msg= br.readLine();
          //   br.
             while ((msgFromClient = br.readLine()) != null) {
-                //System.out.println(msgFromClient);
+                System.out.println(msgFromClient);
                 TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {
                 };
                 Map<String, Object> mapping = new ObjectMapper().readValue(msgFromClient, typeRef);
                 Boolean closesocket = false;
                 if (mapping.containsKey("endProcess"))
                     closesocket = Boolean.getBoolean(mapping.get("endProcess").toString());
-                System.out.println(msgFromClient);
+                //System.out.println(msgFromClient);
                 String pattern= mapping.get("pattern").toString();
                 Map<String, Object> payload= (Map<String, Object>) mapping.get("payload");
                 //

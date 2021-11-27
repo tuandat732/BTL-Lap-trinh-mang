@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Redzone_output_payload {
-    public List<Map<String, Object>> listRedzone;
+    public String listRedzone;
 
-    public Redzone_output_payload(List<Map<String, Object>> listRedzone) {
+    public Redzone_output_payload(String listRedzone) {
         this.listRedzone = listRedzone;
     }
     public Map<String, Object> toMap(){
