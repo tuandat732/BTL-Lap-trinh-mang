@@ -19,7 +19,7 @@ public class getRedzone implements Runnable {
     }
      public void run(){
          try {
-             List<Map<String, Object>> listRedzone= Filehandle.getRedZone();
+             String listRedzone= Filehandle.getRedZone();
              Redzone_output_payload payload= new Redzone_output_payload(listRedzone);
 
              Message mess= new Message(Config.GET_REDZONE, payload.toMap());

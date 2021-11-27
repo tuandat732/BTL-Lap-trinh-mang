@@ -73,19 +73,12 @@ public class Filehandle {
             String filename = root + "/redzone.txt";
             File file = new File(filename);
             file.createNewFile();
-            List<Map<String, Object>> listRedzone = new ArrayList<>();
-            if (file.length() != 0) {
-                FileInputStream fin = new FileInputStream(filename);
-                ObjectInputStream ois = new ObjectInputStream(fin);
-                listRedzone = (List<Map<String, Object>>) ois.readObject();
-                fin.close();
-            }
+            String listRedzone = "";
             // List< Map<String, Object>> test= new ArrayList<>();
-            listRedzone.add(payload.toMap());
             FileOutputStream fout = new FileOutputStream(filename);
-            ObjectOutputStream oos = new ObjectOutputStream(fout);
+            DataOutputStream oos = new DataOutputStream(fout);
 
-            oos.writeObject(listRedzone);
+            oos.writeUTF(payload.listRedzone);
             fout.close();
             Map<String, Object> res= new HashMap<>();
             res.put("status", "success");
@@ -96,14 +89,14 @@ public class Filehandle {
             return res;
         }
     }
-    public static List<Map<String, Object>>  getRedZone() throws IOException, ClassNotFoundException {
+    public static String  getRedZone() throws IOException, ClassNotFoundException {
         String filename= Config.FILE_ROOT+ "/redzone/redzone.txt";
         File file= new File(filename);
-        List<Map<String, Object>> listRedzone= new ArrayList<>();
+        String listRedzone= "";
         if(file.length()!=0 && file.exists()) {
             FileInputStream fin = new FileInputStream(filename);
-            ObjectInputStream ois = new ObjectInputStream(fin);
-            listRedzone = (List<Map<String, Object>>) ois.readObject();
+            DataInputStream ois = new DataInputStream(fin);
+            listRedzone = ois.readUTF();
             fin.close();
         }
         return listRedzone;
