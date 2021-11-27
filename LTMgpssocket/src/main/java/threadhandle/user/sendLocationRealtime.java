@@ -1,4 +1,4 @@
-package threadhandle;
+package threadhandle.user;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,11 +10,11 @@ import java.util.Map;
 
 import common.database;
 
-public class adminhandle implements Runnable {
+public class sendLocationRealtime implements Runnable {
     private Socket clientSocket;
     private String mapping;
 
-    public adminhandle(Socket socket, String mapping) {
+    public sendLocationRealtime(Socket socket, String mapping) {
 
         this.clientSocket = socket;
         this.mapping = mapping;

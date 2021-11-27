@@ -4,12 +4,13 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import classhandle.data.Config;
 import classhandle.identify_socket;
-import classhandle.sharedataclass;
+import classhandle.data.sharedataclass;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import threadhandle.adminhandle;
-import threadhandle.userhandle;
+import threadhandle.admin.adminhandle;
+import threadhandle.user.userhandle;
 
 public class serverside {
     public static void main(String [] args) {
@@ -53,15 +54,17 @@ public class serverside {
                     };
                     Map<String, Object> mapping = new ObjectMapper().readValue(msgFromClient, typeRef);
                     String pattern= mapping.get("pattern").toString();
-                    if (pattern.equals("identify_socket")){
-                        identify_socket idsocket= new identify_socket((Map<String, Object>) mapping.get("payload"));
+                    Map<String, Object> payload= (Map<String, Object>) mapping.get("payload");
+                    if (pattern.equals(Config.IDENTITY_SOCKET)){
+                        identify_socket idsocket= new identify_socket(payload);
                         if (idsocket.role.equals( "user")){
                             userhandle usersock= new userhandle(client);
                             new Thread(usersock).start();
                         }
                         if (idsocket.role.equals("admin")){
                            sharedata.addSocketAdmin(client);
-
+                           adminhandle adminsock= new adminhandle(client);
+                           new Thread(adminsock).start();
                         }
 
                     }

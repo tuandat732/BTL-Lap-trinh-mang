@@ -1,5 +1,6 @@
-package threadhandle;
+package threadhandle.user;
 
+import classhandle.sendLocation.sendLocation_payload;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,10 +12,9 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import classhandle.sharedataclass;
+import classhandle.data.sharedataclass;
 
-import common.database;
-import common.savetofile;
+import common.Filehandle;
 
 public class userhandle implements Runnable {
     private Socket clientSocket;
@@ -42,13 +42,15 @@ public class userhandle implements Runnable {
                 if (!closesocket) {
                     //database db = new database();
                    // db.savelog(mapping);
-//                    savetofile file= new savetofile();
-//                    file.savefile(mapping);
+                    sendLocation_payload payload= new sendLocation_payload((Map<String, Object>) mapping.get("payload"));
+                    Filehandle filehandle = new Filehandle();
+                    filehandle.savefile(payload);
+
                     List<Socket> listadmin= sharedataclass.getListadmin();
                     for(Socket socket: listadmin) {
                         if (socket.isConnected()) {
-                            adminhandle adminsock = new adminhandle(socket, msgFromClient);
-                            new Thread(adminsock).start();
+                            sendLocationRealtime sendLocationSock = new sendLocationRealtime(socket, msgFromClient);
+                            new Thread(sendLocationSock).start();
                         } else{
                             sharedata.deleteSocketAdmin(socket);
                         }
@@ -61,7 +63,7 @@ public class userhandle implements Runnable {
                     break;
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
 

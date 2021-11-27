@@ -43,7 +43,7 @@ public class clientside1 {
                 Map<String, Object> mapmsg= new HashMap<>();
                 Integer x= (int) Math.floor(Math.random()*(100-1+1)+1);
                 Integer y= (int) Math.floor(Math.random()*(100-1+1)+1);
-                mapmsg.put("idUser", "user1");
+                mapmsg.put("userId", "user1");
                 Map<String, Object> location= new HashMap<>();
                 location.put("lat",x);
                 location.put("lng",y);
