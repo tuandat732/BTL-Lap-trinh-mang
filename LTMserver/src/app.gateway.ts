@@ -41,9 +41,37 @@ export class AppGateway
           role: "admin"
         }
       }
+      clientTcp.push('')
       clientTcp.write(JSON.stringify(json) + "\n");
       console.log('connection client ok');
       console.log(JSON.stringify(json))
+      let jsonsearch = {
+        pattern: "search_location_history",
+        payload: {
+          userId: "user1",
+          fromDate: "2021-11-27",
+          toDate: "2021-11-27"
+        }
+      }
+      let jsoncreate = {
+        pattern: "create_redzone",
+        payload: {
+          redzoneName: "DDDD",
+          listLocation: "eeeee"
+        }
+      }
+      let jsongetredzone = {
+        pattern: "get_redzone",
+        payload: {}
+
+      }
+      // clientTcp.push('')
+      // clientTcp.write(JSON.stringify(jsongetredzone) + "\n");
+      // console.log(JSON.stringify(jsongetredzone))
+      clientTcp.push('')
+      clientTcp.write(JSON.stringify(jsonsearch) + "\n");
+      console.log(JSON.stringify(jsonsearch))
+
     });
 
     clientTcp.on('error', function (error) {

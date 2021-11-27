@@ -1,21 +1,17 @@
 package common;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.FindOneAndUpdateOptions;
 import org.bson.Document;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public class database {
     public void savelog(Map<String, Object> json) throws IOException {
@@ -23,8 +19,8 @@ public class database {
         MongoDatabase db= mongoClient.getDatabase("LTM");
         MongoCollection coll= db.getCollection("gpslogs");
 
-        savetofile file= new savetofile();
-        file.savefile(json);
+        Filehandle filehandle = new Filehandle();
+       // filehandle.savefile(json);
         Document filter= new Document("userId", json.get("userId"));
         FindIterable<Document> check = coll.find(filter);
         MongoCursor<Document> iterator = check.iterator();

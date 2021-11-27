@@ -1,4 +1,4 @@
-package classhandle;
+package classhandle.data;
 
 import java.net.Socket;
 import java.util.ArrayList;
